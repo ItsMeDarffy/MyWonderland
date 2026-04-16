@@ -12,12 +12,13 @@
 
 body {
   background: #050505;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'VT323', monospace;
   height: 100vh;
   overflow: hidden;
+  line-height: 1.4;
 }
 
-/* Full-screen background with moving scanlines */
+/* Full-screen background with scanlines */
 .crt-fullscreen {
   position: fixed;
   top: 0; left: 0;
@@ -63,7 +64,6 @@ body {
   border-radius: 12px;
 }
 
-/* Inner bezel with soft blur */
 .monitor-bezel {
   background: rgba(10, 10, 10, 0.82);
   padding: 25px 30px;
@@ -92,6 +92,25 @@ body {
   border-radius: 12px;
 }
 
+/* Scrollable content area */
+.right-area {
+  flex: 1;
+  padding-left: 30px;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+  scrollbar-width: thin;
+  scrollbar-color: var(--crt-blue) transparent;
+}
+
+.right-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.right-area::-webkit-scrollbar-thumb {
+  background: var(--crt-blue);
+  border-radius: 10px;
+}
+
 /* Header */
 .monitor-header {
   display: flex;
@@ -103,16 +122,16 @@ body {
 
 .file-name {
   color: var(--crt-beige);
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   letter-spacing: 2px;
 }
 
 .signal {
   color: #666;
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 
-/* Layout */
+/* Main layout */
 .main-content {
   display: flex;
   flex: 1;
@@ -134,7 +153,7 @@ body {
   padding: 14px 18px;
   border: 1px solid #444;
   transition: all 0.3s;
-  font-size: 1.05rem;
+  font-size: 1.2rem;
 }
 
 .sidebar-item:hover,
@@ -143,12 +162,7 @@ body {
   border-color: var(--crt-blue);
 }
 
-.right-area {
-  flex: 1;
-  padding-left: 30px;
-  overflow: hidden;
-}
-
+/* Content pages - only one visible at a time */
 .content-page {
   display: none;
 }
@@ -160,7 +174,7 @@ body {
 /* Text styles */
 .prescript-text {
   color: var(--crt-blue);
-  font-size: 1.32rem;
+  font-size: 1.45rem;
   line-height: 1.75;
   text-shadow: 0 0 14px var(--crt-blue);
   white-space: pre-wrap;
@@ -168,7 +182,7 @@ body {
 
 .links-section h3 {
   color: #888;
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   margin-bottom: 16px;
   letter-spacing: 3px;
 }
@@ -188,7 +202,7 @@ body {
   padding: 14px 18px;
   border: 1px solid #444;
   transition: all 0.3s;
-  font-size: 1.08rem;
+  font-size: 1.2rem;
 }
 
 .link-item:hover {
@@ -198,7 +212,7 @@ body {
 }
 
 .folder {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
 }
 
 /* Footer */
@@ -206,7 +220,7 @@ body {
   margin-top: 25px;
   text-align: center;
   color: #555;
-  font-size: 0.88rem;
+  font-size: 1rem;
   letter-spacing: 2px;
 }
 
@@ -243,4 +257,26 @@ body {
   font-weight: bold;
   text-shadow: 0 0 20px var(--crt-blue);
   letter-spacing: 6px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .crt-monitor { width: 96%; max-width: none; padding: 8px; }
+  .monitor-bezel { padding: 18px 20px; }
+  .main-content { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 3px solid var(--crt-blue);
+    padding-bottom: 15px;
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .sidebar-item { font-size: 1.1rem; padding: 10px 16px; }
+  .right-area { padding-left: 0; padding-top: 20px; max-height: 65vh; }
+  .prescript-text { font-size: 1.25rem; line-height: 1.6; }
+  .link-grid { grid-template-columns: 1fr; gap: 10px; }
+  .link-item { font-size: 1.1rem; padding: 12px 14px; }
 }
