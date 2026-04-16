@@ -1,0 +1,246 @@
+:root {
+  --crt-blue: #00ddff;
+  --crt-dark: #0a0a0a;
+  --crt-beige: #d4c9b0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #050505;
+  font-family: 'Courier New', Courier, monospace;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Full-screen background with moving scanlines */
+.crt-fullscreen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--crt-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Moving scanlines */
+.crt-fullscreen::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 221, 255, 0.13) 3px,
+    rgba(0, 221, 255, 0.13) 6px
+  );
+  pointer-events: none;
+  animation: scan-move 12s linear infinite;
+}
+
+@keyframes scan-move {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 360px; }
+}
+
+/* Monitor box */
+.crt-monitor {
+  width: 92%;
+  max-width: 860px;
+  background: rgba(26, 26, 26, 0.78);
+  border: 4px solid var(--crt-blue);
+  box-shadow: 0 0 90px rgba(0, 221, 255, 0.9);
+  padding: 12px;
+  position: relative;
+  z-index: 2;
+
+  transform: perspective(1400px) rotateX(5deg) rotateY(3deg);
+  border-radius: 12px;
+}
+
+/* Inner bezel with soft blur */
+.monitor-bezel {
+  background: rgba(10, 10, 10, 0.82);
+  padding: 25px 30px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  filter: blur(0.6px);
+}
+
+/* Stronger centered fisheye */
+.monitor-bezel::after {
+  content: '';
+  position: absolute;
+  inset: -25%;
+  background: radial-gradient(
+    circle at 50% 42%,
+    transparent 44%,
+    rgba(0, 0, 0, 0.48) 70%,
+    rgba(0, 0, 0, 0.78) 96%
+  );
+  pointer-events: none;
+  z-index: 3;
+  border-radius: 12px;
+}
+
+/* Header */
+.monitor-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--crt-blue);
+}
+
+.file-name {
+  color: var(--crt-beige);
+  font-size: 1.15rem;
+  letter-spacing: 2px;
+}
+
+.signal {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* Layout */
+.main-content {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.sidebar {
+  width: 240px;
+  border-right: 3px solid var(--crt-blue);
+  padding-right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-item {
+  color: var(--crt-blue);
+  text-decoration: none;
+  padding: 14px 18px;
+  border: 1px solid #444;
+  transition: all 0.3s;
+  font-size: 1.05rem;
+}
+
+.sidebar-item:hover,
+.sidebar-item.active {
+  background: rgba(0, 221, 255, 0.18);
+  border-color: var(--crt-blue);
+}
+
+.right-area {
+  flex: 1;
+  padding-left: 30px;
+  overflow: hidden;
+}
+
+.content-page {
+  display: none;
+}
+
+.content-page.active {
+  display: block;
+}
+
+/* Text styles */
+.prescript-text {
+  color: var(--crt-blue);
+  font-size: 1.32rem;
+  line-height: 1.75;
+  text-shadow: 0 0 14px var(--crt-blue);
+  white-space: pre-wrap;
+}
+
+.links-section h3 {
+  color: #888;
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+  letter-spacing: 3px;
+}
+
+.link-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.link-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--crt-blue);
+  text-decoration: none;
+  padding: 14px 18px;
+  border: 1px solid #444;
+  transition: all 0.3s;
+  font-size: 1.08rem;
+}
+
+.link-item:hover {
+  background: rgba(0, 221, 255, 0.18);
+  border-color: var(--crt-blue);
+  transform: translateX(8px);
+}
+
+.folder {
+  font-size: 1.5rem;
+}
+
+/* Footer */
+.monitor-footer {
+  margin-top: 25px;
+  text-align: center;
+  color: #555;
+  font-size: 0.88rem;
+  letter-spacing: 2px;
+}
+
+/* Clear Overlay */
+.clear-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(5, 5, 5, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s;
+}
+
+.clear-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.clear-box {
+  background: #0a0a0a;
+  border: 3px solid var(--crt-blue);
+  padding: 40px 70px;
+  box-shadow: 0 0 50px rgba(0, 221, 255, 0.9);
+}
+
+.clear-text {
+  color: var(--crt-blue);
+  font-size: 2.4rem;
+  font-weight: bold;
+  text-shadow: 0 0 20px var(--crt-blue);
+  letter-spacing: 6px;
+}
